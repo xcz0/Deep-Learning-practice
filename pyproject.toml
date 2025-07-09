@@ -8,59 +8,24 @@ authors = [
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "scikit-learn",
+    "pyyaml",
+    
     "torch",
     "torchvision",
     "torchviz",
     "timm",
     "lightning",
-    "numpy",
-    "scikit-learn",
-    "pyyaml",
+    "torchmetrics",
+    "tensorboard",
+
     "hydra-core",
     "omegaconf",
-    "tensorboard",
-    
-
+    "hydra-colorlog",
+    "hydra-optuna-sweeper",
 ]
 
-# ==============================================================================
-# 可选依赖 (按需安装)
-# ==============================================================================
-[project.optional-dependencies]
-# --- 按算法或研究主题划分的可选包 ---
-# 使用方法: pip install -e .[<group_name>]
-# 例如，要安装Transformer和XAI相关的库: pip install -e .[transformer,xai]
 
-transformer = [
-    "transformers",
-    "datasets",
-]
-
-xai = [
-    "captum",
-]
-
-attack = [
-    "foolbox",
-    "adversarial-robustness-toolbox", # for ART
-]
-
-compression = [
-    "torch-pruning",
-]
-
-adaptation = [
-    "pytorch-adapt",
-]
-
-# meta = [
-#     "learn2learn",
-# ]
-
-# --- 用于实验跟踪的额外工具 ---
-tracking = [
-    "wandb",
-]
 
 [dependency-groups]
 dev = [
@@ -68,4 +33,9 @@ dev = [
     "ipywidgets",
     "jupyter",
     "kaggle",
+    "rich",
+    "rootutils",
+    "pytest",
+    "pre-commit",
 ]
+
