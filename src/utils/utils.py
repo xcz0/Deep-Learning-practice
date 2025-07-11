@@ -1,5 +1,6 @@
 import warnings
 from importlib.util import find_spec
+from pathlib import Path
 from typing import Any, Callable, Dict, Optional, Tuple
 
 from omegaconf import DictConfig
@@ -16,9 +17,22 @@ def extras(cfg: DictConfig) -> None:
         - Ignoring python warnings
         - Setting tags from command line
         - Rich config printing
+        - Creating necessary directories
 
     :param cfg: A DictConfig object containing the config tree.
     """
+    # ensure necessary directories exist
+    if cfg.get("paths"):
+        if cfg.paths.get("output_dir"):
+            output_dir = Path(cfg.paths.output_dir)
+            output_dir.mkdir(parents=True, exist_ok=True)
+            log.info(f"Created output directory: {output_dir}")
+
+        if cfg.paths.get("log_dir"):
+            log_dir = Path(cfg.paths.log_dir)
+            log_dir.mkdir(parents=True, exist_ok=True)
+            log.info(f"Created log directory: {log_dir}")
+
     # return if no `extras` config
     if not cfg.get("extras"):
         log.warning("Extras config not found! <cfg.extras=null>")
@@ -95,7 +109,9 @@ def task_wrapper(task_func: Callable) -> Callable:
     return wrap
 
 
-def get_metric_value(metric_dict: Dict[str, Any], metric_name: Optional[str]) -> Optional[float]:
+def get_metric_value(
+    metric_dict: Dict[str, Any], metric_name: Optional[str]
+) -> Optional[float]:
     """Safely retrieves value of the metric logged in LightningModule.
 
     :param metric_dict: A dict containing metric values.

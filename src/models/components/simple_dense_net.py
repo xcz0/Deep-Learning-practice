@@ -42,10 +42,16 @@ class SimpleDenseNet(nn.Module):
         :param x: The input tensor.
         :return: A tensor of predictions.
         """
-        batch_size, channels, width, height = x.size()
-
-        # (batch, 1, width, height) -> (batch, 1*width*height)
-        x = x.view(batch_size, -1)
+        # Handle both 2D (tabular data) and 4D (image data) inputs
+        if x.dim() == 4:
+            # For image data: (batch, channels, width, height) -> (batch, features)
+            batch_size = x.size(0)
+            x = x.view(batch_size, -1)
+        elif x.dim() == 2:
+            # For tabular data: already in the right shape (batch, features)
+            pass
+        else:
+            raise ValueError(f"Expected 2D or 4D input tensor, got {x.dim()}D")
 
         return self.model(x)
 

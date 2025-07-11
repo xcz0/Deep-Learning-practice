@@ -1,0 +1,22 @@
+# configs/data/covid.yaml
+
+_target_: src.data.covid_datamodule.CovidDataModule
+
+data_dir: ${paths.data_dir}
+batch_size: 32
+train_val_test_split:
+  train: 0.8
+  val: 0.2
+  test: 0.0
+num_workers: 0
+pin_memory: false
+persistent_workers: false
+drop_last: false
+normalize_features: true
+random_seed: 42
+
+# <--- 文件和列的配置 ---
+train_filename: "covid/covid.train.csv"
+test_filename: "covid/covid.test.csv"
+id_column: "id"
+target_column: "tested_positive"

@@ -53,6 +53,19 @@ def evaluate(cfg: DictConfig) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     log.info(f"Instantiating model <{cfg.model._target_}>")
     model: LightningModule = hydra.utils.instantiate(cfg.model)
 
+    # Set test IDs if datamodule has them (for proper CSV output format)
+    try:
+        # Setup datamodule to ensure test_ids are loaded
+        datamodule.setup("test")
+        if hasattr(datamodule, "test_ids") and hasattr(model, "set_test_ids"):
+            test_ids = getattr(datamodule, "test_ids", None)
+            if test_ids is not None:
+                getattr(model, "set_test_ids")(test_ids)
+                log.info("Test IDs set for proper CSV output format")
+    except AttributeError:
+        # If datamodule doesn't have test_ids, continue without them
+        pass
+
     log.info("Instantiating loggers...")
     logger: List[Logger] = instantiate_loggers(cfg.get("logger"))
 

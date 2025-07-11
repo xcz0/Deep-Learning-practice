@@ -1,0 +1,4 @@
+prediction:
+  _target_: src.prediction.PredictionWriter
+  output_dir: ${paths.output_dir} # 使用hydra的路径配置
+  filename: "predictions.csv"
